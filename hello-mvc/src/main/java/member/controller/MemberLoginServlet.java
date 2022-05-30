@@ -79,7 +79,8 @@ public class MemberLoginServlet extends HttpServlet {
 //		reqDispatcher.forward(request, response);
 		
 		// 4. 응답처리 : 리다이렉트
-		response.sendRedirect(request.getContextPath() + "/");
+		String Referer = request.getHeader("Referer");
+		response.sendRedirect(Referer);
 		
 	}
 

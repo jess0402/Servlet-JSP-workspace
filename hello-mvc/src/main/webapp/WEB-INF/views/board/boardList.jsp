@@ -38,7 +38,13 @@
 %>
 			<tr>
 				<td><%= board.getNo() %></td>
-				<td><%= board.getTitle() %></td>
+				<td>
+					<a href="<%= request.getContextPath() %>/board/boardView?no=<%= board.getNo() %>"><%= board.getTitle() %></a>
+					
+					<% if(board.getCommentCount() > 0){ %>
+						(<%= board.getCommentCount() %>)
+					<% } %>
+				</td>
 				<td><%= board.getMemberId() %></td>
 				<td><%= board.getRegDate() %></td>
 				<td>

@@ -63,6 +63,7 @@ table#tbl-comment tr.level2 td:first-of-type{padding-left:100px;}
 table#tbl-comment tr.level2 sub.comment-writer {color:#8e8eff; font-size:14px}
 table#tbl-comment tr.level2 sub.comment-date {color:#ff9c8a; font-size:10px}
 
+
 /*답글관련*/
 table#tbl-comment textarea{margin: 4px 0 0 0;}
 table#tbl-comment button.btn-comment-enroll2{width:60px; height:23px; color:white; background:#3300ff; position:relative; top:-5px; left:10px;}
