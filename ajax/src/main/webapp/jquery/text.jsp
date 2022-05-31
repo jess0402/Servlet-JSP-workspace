@@ -6,6 +6,11 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <script src="<%= request.getContextPath() %>/js/jquery-3.6.0.js"></script>
+<style>
+table {border : 1px solid #000; border-collapse: collapse; margin: 10px 0;}
+th, td {border : 1px solid #000; text-align: center; padding: 3px; }
+table img {width: 100px;}
+</style>
 </head>
 <body>
 	<h1>text</h1>
@@ -54,80 +59,75 @@
 				<th>타입</th> <!-- select태그 하위에 해당타입이 selected 처리 -->
 				<th>프로필</th> <!-- img태그처리 -->
 			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<td>0</td>
-				<td>이준영</td>
-				<td>
-					<select name="type" id="type">
-						<option value="Comedian">코미디언</option>
-						<option value="Actor" selected>배우</option>
-						<option value="Singer">가수</option>
-						<option value="Model">모델</option>					
-						<option value="Entertainer">엔터테이너</option>					
-					</select>
-				</td>
-				<td><img src="<%= request.getContextPath() %>/images/jun.jpg" style="width:200px;"/></td>
-				
-			</tr>
+		</thead><tbody>
 		</tbody>
 	</table>
 	<script>
 	/**
-	* csv - comma separated value
-	*/
+	 * csv comma separated value
+	 * 
+	 */
 	btn2.addEventListener('click', (e) => {
 		$.ajax({
 			url : "<%= request.getContextPath() %>/jquery/csv",
 			method : "GET",
-			dataType : "text",
+			dataType : "text", 
 			success(response){
-				const celeb = response.split("\r\n");
-				console.log(celeb);
+				console.log(response);
+				const celebStrs = response.split("\r\n"); // 개행문자 단위로 잘라냄
+				const tbody = document.querySelector("#tbl-celeb tbody");
+				tbody.innerHTML = "";  // 두 번 실행했을 때 길어지지 않도록 tbody 초기화
 				
-				const arr = celeb[0].split(",");
-				
-				const tr = `
-					<tr>
-						<td>\${arr[0]}</td>
-						<td>\${arr[1]}</td>
-						<td><select name="type" id="type">
-							<option value="COMEDIAN">코미디언</option>
-							<option value="ACTOR">배우</option>
-							<option value="SINGER">가수</option>
-							<option value="MODEL">모델</option>					
-							<option value="ENTERTAINER">엔터테이너</option>					
-						</select></td>
-						<td><img src="<%= request.getContextPath() %>/images/\${arr[3]}" style="width:200px;"/></td>
-					</tr>`
-				
-				const no = `<td>\${arr[0]}</td>`;
-				const name = `<td>\${arr[1]}</td>`;
-				const type = 
-					`<td><select id="type">
-						<option value="COMEDIAN">코미디언</option>
-						<option value="ACTOR">배우</option>
-						<option value="SINGER">가수</option>
-						<option value="MODEL">모델</option>					
-						<option value="ENTERTAINER">엔터테이너</option>					
-					</select></td>`;
-				const img = `<td><img src="<%= request.getContextPath() %>/images/\${arr[3]}" style="width:200px;"/></td>`;
-				$("tbody")
-					.append(tr);
-				
-				$("#type")
-					.val("SINGER")
-					.prop("selected", true);
-
-				
-				
+				celebStrs.forEach((celebStr) => { 
+					if(celebStr === '') return; // 마지막 ''
+					// -> celebStr이 빈문자열이라면 더이상 진행하지 마라
+					const celeb = celebStr.split(",");
+					// console.log(celeb); 
+					const tr = document.createElement("tr");
+					const tdNo = document.createElement("td");
+					tdNo.append(celeb[0]);
+					const tdName = document.createElement("td");
+					tdName.append(celeb[1]);
+					const tdType = document.createElement("td");
+					const select = document.createElement("select");
+					// ACTOR, SINGER, MODEL, COMEDIAN, ENTERTAINER;
+					const option1 = document.createElement("option")
+					option1.innerHTML = "ACTOR";
+					const option2 = document.createElement("option")
+					option2.innerHTML = "SINGER";
+					const option3 = document.createElement("option")
+					option3.innerHTML = "MODEL";
+					const option4 = document.createElement("option")
+					option4.innerHTML = "COMEDIAN";
+					const option5 = document.createElement("option")
+					option5.innerHTML = "ENTERTAINER";
+					select.append(option1, option2, option3, option4, option5);
+					select.value = celeb[2];
+					// select 값 변경 하지 못하게 하는 방법
+					// 방법 1
+					// select.disabled = "disabled";
+					// 방법 2
+					select.dataset.value = celeb[2]; // dataset에 속성으로 원래값들을 담아두고
+					select.onchange = function(){
+						this.value = this.dataset.value;
+						// 값이 바뀔려고 하면 이전 값들로 되돌려놓는다.
+					};
+					tdType.append(select);
+					const tdProfile = document.createElement("td");
+					const img = document.createElement("img");
+					img.src = `<%= request.getContextPath() %>/images/\${celeb[3]}`
+					tdProfile.append(img);
+					tr.append(tdNo, tdName, tdType, tdProfile);
+					tbody.append(tr);
+				});
 			},
 			error(xhr, textStatus, err){
 				console.log("error : ", xhr, textStatus, err);
 			}
+			
 		});
 	});
+	
 	
 	</script>
 	
