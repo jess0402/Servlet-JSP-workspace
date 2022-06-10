@@ -32,6 +32,7 @@
 <meta charset="UTF-8">
 <title>Hello MVC</title>
 <link rel="stylesheet" href="<%=request.getContextPath() %>/css/style.css" />
+<script src="<%= request.getContextPath() %>/js/jquery-3.6.0.js"></script>
 <script>
 	// document.loginFrm.onsubmit = () => { } 
 	// 위와 같이 하면 안됨. 스크립트가 로드될때 아래코드 로드가 다 되지 않아서 loginFrm을 모르기 때문.
@@ -113,6 +114,8 @@
             		<li class="home"><a href="<%= request.getContextPath() %>">Home</a></li>
             		<li class="notice"><a href="#">공지사항</a></li>
             		<li class="board"><a href="<%= request.getContextPath() %>/board/boardList">게시판</a></li>
+            		<li class="photo"><a href="<%= request.getContextPath() %>/photo/photoList">사진게시판</a></li>            		
+            		<li class="chat"><a href="<%= request.getContextPath() %>/chat/chatroom">채팅</a></li>            				
             		<% if(loginMember != null && loginMember.getMemberRole() == MemberRole.A) { %>
 	            		<li class="admin"><a href="<%= request.getContextPath() %>/admin/memberList">회원관리</a></li>        		
             		<% } %>

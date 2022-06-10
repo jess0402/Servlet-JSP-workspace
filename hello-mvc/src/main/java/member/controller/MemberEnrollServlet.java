@@ -69,6 +69,7 @@ public class MemberEnrollServlet extends HttpServlet {
 			// 3. 업무로직 - 실제 db에 insert하기
 			int result = memberService.insertMember(member);
 			String msg = "성공적으로 회원가입했습니다.";
+			// String msg = result > 0 ? "성공적으로 회원가입했습니다." : "회원가입 실패했습니다.";
 			
 			// 4. 리다이렉트(DML처리인 경우 url을 변경해서 새로고침오류를 방지한다.)
 			// 사용자 경고창 처리
