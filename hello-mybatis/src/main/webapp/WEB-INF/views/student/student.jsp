@@ -98,7 +98,6 @@ table.tbl-student tr:last-of-type td:first-child{text-align:center;}
 			   	dataType : "json",
   				success(msg){
   					alert(msg);
-  					document.querySelector("#totalCount").innerHTML = data.totalCount;
   				},
   				error: console.log
   			});
