@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="student">
+	<select id="selectOne" parameterType="_int" resultType="student">
+		select
+			*
+		from
+			student
+		where
+			deleted_at is null 
+		  and 
+		  	no = #{no}
+	</select>
+	
+	<select id="selectOneMap" resultMap="studentMap">
+		select
+			*
+		from
+			student
+		where
+			deleted_at is null 
+		  and 
+		  	no = #{no}
+	</select>
+	<!-- resultMap은 매핑된 컬럼명을 변경하거나 타입을 변경할 수 있다. -->
+	<resultMap type="map" id="studentMap">
+		<!-- 
+			column
+				- db쪽 이름
+				- 대소문자 구분 안함.
+			property 
+				- 자바쪽 이름
+				- 대소문자 구분함
+		 -->
+		<!-- id는 pk컬럼 전용 -->
+		<id column="NO" property="no" />
+		<result column="NAME" property="name" />
+		<result column="TEL" property="tel" />
+	</resultMap>
+	
+	<!-- resultType 속성은 resultSet을 위한 것이라서 DML일때는 적지 않는다. -->
+	<insert id="insertStudent" parameterType="student" >
+		insert into 
+			student (no, name, tel)
+		values
+			(seq_student_no.nextval, #{name}, #{tel})
+	</insert>
+	<!-- #{name}, #{tel}은 필드가아니고 getName, getTel이라고 보면 됨. (OGNL) -->
+	
+	<insert id="insertStudentMap" parameterType="map" >
+		insert into 
+			student (no, name, tel)
+		values
+			(seq_student_no.nextval, #{name}, #{tel})
+	</insert>
+	
+	<!-- select는 DQL이므로 resultType 속성을 반드시 작성해야 한다. -->
+	<!-- parameterType은 DML이건 DQL이건 생략가능하다. -->
+	<select id="getTotalCount" resultType="_int">
+		select
+			count(*)
+		from 
+			student
+		where
+			deleted_at is null
+	</select>
+	
+	
+</mapper>

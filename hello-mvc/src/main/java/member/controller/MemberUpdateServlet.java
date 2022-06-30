@@ -63,6 +63,7 @@ public class MemberUpdateServlet extends HttpServlet {
 			// 세션 정보 갱신
 			Member updateMember = memberService.findByMemberId(memberId);
 			
+			
 			// 4. redirect - msg는 session에 저장
 			request.getSession().setAttribute("msg", msg);  // redirect 후에 꺼내서 출력이 됨.
 			response.sendRedirect(request.getContextPath() + "/member/memberView");

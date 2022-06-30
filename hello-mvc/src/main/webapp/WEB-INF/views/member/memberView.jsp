@@ -5,6 +5,7 @@
     pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/common/header.jsp" %>
 <%
+
 	String memberId = loginMember.getMemberId();
 	String password = loginMember.getPassword();
 	String memberName = loginMember.getMemberName();
@@ -84,7 +85,7 @@
 			</tr>
 		</table>
         <input type="submit" value="정보수정"/>
-        <input type="button" value="비밀번호수정" onclick="location.href='<%= request.getContextPath() %>/member/passwordUpdate';"/>
+        <input type="button" value="비밀번호수정" onclick="loction.href='<%= request.getContextPath() %>/member/passwordUpdate';"/>
         <input type="button" onclick="deleteMember();" value="탈퇴"/>
 	</form>
 </section>
