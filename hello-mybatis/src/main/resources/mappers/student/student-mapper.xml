@@ -67,5 +67,25 @@
 			deleted_at is null
 	</select>
 	
+	<update id="updateStudent">
+		update 
+			student
+		set
+			name = #{name},
+			tel = #{tel},
+			updated_at = sysdate
+		where 
+			no = #{no}
+	</update>
+	
+	<update id="deleteStudent">
+		update 
+			student
+		set
+			deleted_at = sysdate
+		where 
+			no = #{no}
+	</update>
+	
 	
 </mapper>

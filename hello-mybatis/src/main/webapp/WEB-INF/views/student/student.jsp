@@ -77,12 +77,54 @@ table.tbl-student tr:last-of-type td:first-child{text-align:center;}
                 </tr>
                 <tr>
                     <td colspan="2">
-                        <input type="submit" value="수정"/>
+                        <input type="button" value="수정" onclick="updateStudent();" />
                         <input type="button" value="삭제" onclick="deleteStudent();" />
                     </td>
                 </tr>
             </table>
         </form>
 	</div>
+	
+	<script>
+		const updateStudent = () => {
+			
+  			const studentUpdateFrm = $("form[name=studentUpdateFrm]").serialize();
+  			// console.log(studentUpdateFrm);
+  			
+  			$.ajax({
+  				url: "${pageContext.request.contextPath}/student/updateStudent.do",
+  				data: studentUpdateFrm,
+ 			   	method : "POST",
+			   	dataType : "json",
+  				success(msg){
+  					alert(msg);
+  					document.querySelector("#totalCount").innerHTML = data.totalCount;
+  				},
+  				error: console.log
+  			});
+		
+		}
+		
+		const deleteStudent = () => {
+			
+  			const studentUpdateFrm = $("form[name=studentUpdateFrm]").serialize();
+  			// console.log(studentUpdateFrm);
+  			
+  			$.ajax({
+  				url: "${pageContext.request.contextPath}/student/deletStudent.do",
+  				data: studentUpdateFrm,
+ 			   	method : "POST",
+			   	dataType : "json",
+  				success(msg){
+  					alert(msg);
+  					location.href = "${pageContext.request.contextPath}/student/student.do"
+  				},
+  				error: console.log
+  			});
+		
+		}
+		
+		
+	</script>
 </body>
 </html>
