@@ -13,11 +13,11 @@ import com.kh.common.AbstractController;
 import com.kh.student.model.dto.Student;
 import com.kh.student.model.service.StudentService;
 
-public class UpdateStudentController extends AbstractController {
+public class StudentUpdateController extends AbstractController {
 
 	private StudentService studentService;
 	
-	public UpdateStudentController(StudentService studentService) {
+	public StudentUpdateController(StudentService studentService) {
 		this.studentService = studentService;
 	}
 
@@ -33,15 +33,17 @@ public class UpdateStudentController extends AbstractController {
 		String tel = request.getParameter("tel");
 		Student student = new Student(no, name, tel, null, null, null);
 		
-		System.out.println("UpdateStudentController@student = " + student);
+		System.out.println("StudentUpdateController@student = " + student);
 		
 		// 2. 업무로직
 		int result = studentService.updateStudent(student);
 		
 		// 응답작성 - 비동기 json 응답을 직접 작성한다.
 		response.setContentType("application/json;charset=utf-8");
-		String msg = "학생정보 수정 성공";
-		new Gson().toJson(msg, response.getWriter());
+		Map<String, Object> map = new HashMap<>();
+		map.put("msg", "정상적으로 수정되었습니다.");
+		map.put("student", studentService.selectOne(no));
+		new Gson().toJson(map, response.getWriter());
 		
 		return null;
 	}

@@ -2,6 +2,7 @@ package com.kh.common;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,7 +15,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.kh.student.model.dao.StudentDao;
+import com.kh.emp.model.dao.EmpDaoImpl;
+import com.kh.emp.model.service.EmpService;
+import com.kh.emp.model.service.EmpServiceImpl;
 import com.kh.student.model.dao.StudentDaoImpl;
 import com.kh.student.model.service.StudentService;
 import com.kh.student.model.service.StudentServiceImpl;
@@ -39,9 +42,7 @@ public class DispatcherServlet extends HttpServlet {
      * @throws InstantiationException 
      * @see HttpServlet#HttpServlet()
      */
-    public DispatcherServlet() 
-    		throws ClassNotFoundException, 
-    			InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+    public DispatcherServlet() throws Exception {
         // 1. urlCommand.properties load -> prop
     	Properties prop = new Properties();
     	String filename = DispatcherServlet.class.getResource("/urlCommand.properties").getPath();
@@ -51,18 +52,33 @@ public class DispatcherServlet extends HttpServlet {
 			e.printStackTrace();
 		}
     	
-    	// 2. urlCommandMap 요소 추가 (url - className)
-    	StudentDao studentDao = new StudentDaoImpl(); 
-    	StudentService studentService = new StudentServiceImpl(studentDao); // controller 주입용 공용 service객체
+    	// 2. urlCommandMap 요소 추가 (url - className) 
+    	StudentService studentService = new StudentServiceImpl(new StudentDaoImpl()); // controller 주입용 공용 service객체
+    	EmpService empService = new EmpServiceImpl(new EmpDaoImpl()); // controller 주입용 공용 service객체
     	
     	Set<String> urls = prop.stringPropertyNames();
     	for(String url : urls) {
     		String className = prop.getProperty(url);
     		// reflection api를 사용할 객체생성
     		Class<?> clz = Class.forName(className);
-    		Class<?>[] param = {StudentService.class};
-    		AbstractController controller = (AbstractController) clz.getDeclaredConstructor(param).newInstance(studentService);
+    		Class<?>[] param = new Class<?>[1];  // 생성자 조회용 클래스 객체배열 
+    		Object[] args = new Object[1];  // 생성자 호출시 전달할 인자배열
+    		
+    		//package별 분기처리
+    		if(url.startsWith("/student")) {
+    			param[0] = StudentService.class;
+    			args[0] = studentService;
+    		}
+    		else if(url.startsWith("/emp")) {
+    			param[0] = EmpService.class;
+    			args[0] = empService;
+    		}
+    		
+    		Constructor<?> constructor = clz.getDeclaredConstructor(param);
+    		AbstractController controller = 
+    				(AbstractController) constructor.newInstance(args);
     		urlCommandMap.put(url, controller);
+    	
     	}
     	System.out.println("urlCommandMap = " + urlCommandMap);
     }

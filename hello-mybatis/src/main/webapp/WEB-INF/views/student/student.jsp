@@ -88,16 +88,25 @@ table.tbl-student tr:last-of-type td:first-child{text-align:center;}
 	<script>
 		const updateStudent = () => {
 			
-  			const studentUpdateFrm = $("form[name=studentUpdateFrm]").serialize();
+  			//const studentUpdateFrm = $("form[name=studentUpdateFrm]").serialize();
   			// console.log(studentUpdateFrm);
   			
+  			const frm = document.studentUpdateFrm;
+  			const no = frm.no.value;
+  			const name = frm.name.value;
+  			const tel = frm.tel.value;
+  			
+  			if(!no) return;
+  			
   			$.ajax({
-  				url: "${pageContext.request.contextPath}/student/updateStudent.do",
-  				data: studentUpdateFrm,
+  				url: "${pageContext.request.contextPath}/student/studentUpdate.do",
+  				data: {no, name, tel},
  			   	method : "POST",
 			   	dataType : "json",
-  				success(msg){
-  					alert(msg);
+  				success(response){
+			   		console.log(response);
+			   		const {msg} = response;
+			   		alert(msg);
   				},
   				error: console.log
   			});
@@ -106,16 +115,21 @@ table.tbl-student tr:last-of-type td:first-child{text-align:center;}
 		
 		const deleteStudent = () => {
 			
-  			const studentUpdateFrm = $("form[name=studentUpdateFrm]").serialize();
+  			//const studentUpdateFrm = $("form[name=studentUpdateFrm]").serialize();
   			// console.log(studentUpdateFrm);
   			
+  			const frm = document.studentUpdateFrm;
+  			const no = frm.no.value;
+  			
   			$.ajax({
-  				url: "${pageContext.request.contextPath}/student/deletStudent.do",
-  				data: studentUpdateFrm,
+  				url: "${pageContext.request.contextPath}/student/studentDelete.do",
+  				data: {no},
  			   	method : "POST",
 			   	dataType : "json",
-  				success(msg){
-  					alert(msg);
+  				success(response){
+			   		console.log(response);
+			   		const {msg} = response;
+			   		alert(msg);
   					location.href = "${pageContext.request.contextPath}/student/student.do"
   				},
   				error: console.log

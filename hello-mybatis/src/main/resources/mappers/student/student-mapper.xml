@@ -38,6 +38,9 @@
 		<id column="NO" property="no" />
 		<result column="NAME" property="name" />
 		<result column="TEL" property="tel" />
+		<result column="created_at" property="createdAt" />
+		<result column="updated_at" property="updatedAt" />
+		<result column="deleted_at" property="deletedAt" />
 	</resultMap>
 	
 	<!-- resultType 속성은 resultSet을 위한 것이라서 DML일때는 적지 않는다. -->
@@ -87,5 +90,27 @@
 			no = #{no}
 	</update>
 	
+	<!-- 
+		selectList를 처리할때도 resultType에는 하나의 레코드의 타입을 작성해야 한다.
+		그래서 List로 적으면 안되고, Student로 적어야 함. 
+	 -->
+	<select id="selectStudentList" resultType="student">
+		select
+			*
+		from
+			student
+		where 
+			deleted_at is null
+	</select>
+	
+	<!-- 한건조회했을 때 썼던 studentMap을 resultMap에 재사용하면 됨. -->
+	<select id="selectStudentMapList" resultMap="studentMap">
+		select
+			*
+		from
+			student
+		where 
+			deleted_at is null	
+	</select>
 	
 </mapper>

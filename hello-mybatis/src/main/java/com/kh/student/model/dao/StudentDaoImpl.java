@@ -1,5 +1,6 @@
 package com.kh.student.model.dao;
 
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
@@ -47,5 +48,14 @@ public class StudentDaoImpl implements StudentDao {
 		return sqlSession.update("student.deleteStudent", no);
 	}
 
-
+	@Override
+	public List<Student> selectStudentList(SqlSession sqlSession) {
+		// 여러건 조회이므로 selectList
+		return sqlSession.selectList("student.selectStudentList");
+	}
+	
+	@Override
+	public List<Map<String, Object>> selectStudentMapList(SqlSession sqlSession) {
+		return sqlSession.selectList("student.selectStudentMapList");
+	}
 }

@@ -1,6 +1,8 @@
 package com.kh.student.controller;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -10,11 +12,11 @@ import com.google.gson.Gson;
 import com.kh.common.AbstractController;
 import com.kh.student.model.service.StudentService;
 
-public class DeleteStudentController extends AbstractController {
+public class StudentDeleteController extends AbstractController {
 
 	private StudentService studentService;
 	
-	public DeleteStudentController(StudentService studentService) {
+	public StudentDeleteController(StudentService studentService) {
 		this.studentService =  studentService;
 	}
 	
@@ -23,13 +25,14 @@ public class DeleteStudentController extends AbstractController {
 			throws ServletException, IOException {
 		
 		int no = Integer.parseInt(request.getParameter("no"));
-		System.out.println("DeleteStudentController@no = " + no);
+		System.out.println("StudentDeleteController@no = " + no);
 		
 		int result = studentService.deleteStudent(no);
 		
 		response.setContentType("application/json;charset=utf-8");
-		String msg = "학생정보 삭제 완료!";
-		new Gson().toJson(msg, response.getWriter());
+		Map<String, Object> map = new HashMap<>();
+		map.put("msg", "정상적으로 삭제되었습니다.");
+		new Gson().toJson(map, response.getWriter());
 		
 		return null;
 	}
